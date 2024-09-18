@@ -592,7 +592,7 @@ function rineditor_inserter_quick($smilies = true)
 {
 	global $db, $mybb, $theme, $templates, $lang, $smiliecache, $cache, $templatelist, $cache;
 
-	if (!$lang->rineditor) {
+	if (empty($lang->rineditor)) {
 		$lang->load('rineditor');
 	}
 
@@ -650,10 +650,13 @@ function rineditor_inserter_quick($smilies = true)
 
 		if(!$smiliecache)
 		{
-			if(!is_array($smilie_cache))
+			global $smilie_cache;
+
+			if(!isset($smilie_cache) || !is_array($smilie_cache))
 			{
 				$smilie_cache = $cache->read("smilies");
 			}
+
 			foreach($smilie_cache as $smilie)
 			{
 				if($smilie['showclickable'] != 0)
@@ -670,7 +673,7 @@ function rineditor_inserter_quick($smilies = true)
 		{
 			reset($smiliecache);
 
-			$rinsmiledir = $dropdownsmiliesurl = $dropdownsmiliesdes = $dropdownsmiliesnam = $dropdownsmiliesurlmore = $dropdownsmiliesdesmore = $dropdownsmiliesnamemore = "";
+			$rinsmiledir = $dropdownsmiliesurl = $dropdownsmiliesdes = $dropdownsmiliesnam = $dropdownsmiliesurlmore = $dropdownsmiliesdesmore = $dropdownsmiliesnamemore = $dropdownsmiliesname = "";
 			$i = 0;
 
 			foreach($smiliecache as $smilie)
@@ -734,7 +737,7 @@ function rineditor_inserter_quick($smilies = true)
 		$quickquotesty = "<link rel=\"stylesheet\" href=\"".$mybb->asset_url."/jscripts/rin/editor/quickquote.css?ver=".RE_PLUGIN_VER."\" type=\"text/css\" />";
 	}
 
-	if($mybb->user['sourceeditor'] == 1)
+	if(!empty($mybb->user['sourceeditor']))
 	{
 		$sourcemode = "source";
 	}
@@ -743,7 +746,7 @@ function rineditor_inserter_quick($smilies = true)
 	}
 
 	$plu_vb = $cache->read("plugins");
-	if($plu_vb['active']['vbquote']) {
+	if(!empty($plu_vb['active']['vbquote'])) {
 		$rin_vbquote = 1;
 	}
 	else {
